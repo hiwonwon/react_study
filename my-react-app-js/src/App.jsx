@@ -8,10 +8,11 @@ import OnOffComponent from "./components/OnOffComponent";
 import FilteringComponent from "./components/FilteringComponet";
 import RenderingComponent from "./components/RenderingComponent";
 import StopWatchComponent from "./components/StopwatchComponent";
+import TimerComponent from "./components/TimerComponent";
 
 function App() {
   console.log("APP.jsx");
-  return <div>{<StopWatchComponent />}</div>;
+  return <div>{<TimerComponent />}</div>;
 }
 
 export default App;
