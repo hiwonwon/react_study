@@ -1,22 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useTodo } from "./TodoComponentMain";
 
-export function SearchInput({ todoList }) {
+export function SearchInput({}) {
   const [searchInput, setSearchInput] = useState("");
-  const [result, setResult] = useState("");
-  const [color, setColor] = useState("");
+  const [results, setResults] = useState([]);
+  const ctx = useContext(useTodo);
 
   const search = () => {
-    let check = true;
-    todoList.forEach((element) => {
-      if (element.inputValue === searchInput) {
-        setResult(element.inputValue);
-        setColor(element.inputColor);
-        check = false;
-      }
-    });
-    if (check === true) {
-      alert("해당 할 일이 없습니다");
-    }
+    const tmp = ctx.todoList.filter((element) =>
+      element.inputValue.includes(searchInput)
+    );
+
+    setResults(tmp);
   };
 
   return (
@@ -44,9 +39,30 @@ export function SearchInput({ todoList }) {
       </div>
 
       <div style={{ paddingTop: 60, alignItems: "center" }}>
-        <p style={{ backgroundColor: color, width: "100%", minWidth: 300 }}>
-          {result}
-        </p>
+        <ul
+          style={{
+            listStyleType: "none",
+            marginTop: 60,
+            width: "100%",
+            minWidth: 300,
+          }}
+        >
+          {results.map((result, idx) => (
+            <li
+              key={idx}
+              style={{
+                backgroundColor: result.inputColor,
+                marginTop: 20,
+                borderRadius: 3,
+                minWidth: 300,
+                minHeight: 40,
+                textAlign: "center",
+              }}
+            >
+              {result.inputValue}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

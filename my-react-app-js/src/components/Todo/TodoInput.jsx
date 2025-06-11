@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useTodo } from "./TodoComponentMain";
 
-export default function TodoInput({
-  inputColor,
-  inputValue,
-  setInputValue,
-  addTodo,
-}) {
+export default function TodoInput({ inputColor, inputValue, setInputValue }) {
+  const ctx = useContext(useTodo);
   return (
     <div
       style={{
@@ -33,7 +30,7 @@ export default function TodoInput({
           borderStyle: "none",
           borderRadius: "20%",
         }}
-        onClick={addTodo}
+        onClick={ctx.addTodo}
       >
         입력
       </button>

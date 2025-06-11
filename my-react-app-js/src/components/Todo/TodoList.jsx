@@ -1,5 +1,10 @@
-export function TodoList({ todoList }) {
-  //console.log("투두리스트", todoList);
+import { useContext } from "react";
+import TodoItem from "./TodoItem";
+import { useTodo } from "./TodoComponentMain";
+
+export function TodoList({}) {
+  // console.log("투두리스트", todoList);
+  const ctx = useContext(useTodo);
   return (
     <div>
       <ul
@@ -10,19 +15,9 @@ export function TodoList({ todoList }) {
           minWidth: 300,
         }}
       >
-        {todoList.map((todo, idx) => (
-          <li
-            key={idx}
-            style={{
-              backgroundColor: todo.inputColor,
-              marginTop: 20,
-              borderRadius: 3,
-              minWidth: 300,
-            }}
-          >
-            {todo.inputValue}
-          </li>
-        ))}
+        {ctx.todoList.map(({ inputValue, inputColor }, idx) => {
+          return <TodoItem text={inputValue} color={inputColor} idx={idx} />;
+        })}
       </ul>
     </div>
   );
