@@ -1,11 +1,18 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import TodoInput from "./TodoInput";
 import { TodoColorbar } from "./TodoColorbar";
 import { TodoList } from "./TodoList";
 import { SearchInput } from "./SearchInput";
+import { uid } from "uid";
+import React from "react";
+import { ColorPicker } from "antd";
 
-const useTodo = createContext(null);
-export { useTodo };
+const todoContext = createContext(null);
+export { todoContext };
+
+function useTodo() {
+  return useContext(todoContext);
+}
 
 export default function TodoComponent() {
   const [inputColor, setInputColor] = useState("white");
@@ -14,36 +21,37 @@ export default function TodoComponent() {
 
   //할 일 입력시
   const addTodo = () => {
-    const newTodoList = [...todoList, { inputValue, inputColor }];
+    const newTodoList = [...todoList, { id: uid(), inputValue, inputColor }];
     setTodoList(newTodoList);
-    console.log(todoList);
     sessionStorage.setItem("todoList", JSON.stringify(newTodoList));
     setInputValue("");
   };
 
   //삭제 함수
-  const delTodo = (idx) => {
+  const delTodo = (todoId) => {
     const tmp = todoList.filter((todo, index) => {
-      return index !== idx;
+      return todoId !== todo.id;
     });
-    console.log("tmpIdx", idx);
+    console.log("tmpIdx", todoId);
     setTodoList(tmp);
     sessionStorage.setItem("todoList", JSON.stringify(tmp));
   };
 
   //수정 함수
-  const modifyTodo = (idx, content) => {
+  const modifyTodo = (todoId, content) => {
+    console.log("수정");
     const modifiedTodo = todoList.map((todo, i) => {
-      if (i === idx) {
+      if (todoId === todo.id) {
         return {
-          inputValue: content, // 새로운 내용으로 덮어쓰기
-          inputColor: todo.inputColor, // 기존 색상 유지
+          ...todo,
+          ...content,
+          id: todo.id,
         };
       } else {
         return todo; // 그대로 유지
       }
     });
-    console.log(modifiedTodo);
+    console.log("modifiedTodo", modifiedTodo);
     setTodoList(modifiedTodo);
     sessionStorage.setItem("todoList", JSON.stringify(modifiedTodo));
   };
@@ -56,7 +64,7 @@ export default function TodoComponent() {
   }, []);
 
   return (
-    <useTodo.Provider
+    <todoContext.Provider
       value={{
         todoList: todoList,
         addTodo: addTodo,
@@ -109,6 +117,9 @@ export default function TodoComponent() {
           <SearchInput />
         </div>
       </div>
-    </useTodo.Provider>
+      <div style={{ marginTop: "50px" }}>
+        <ColorPicker defaultValue="#1677ff" />
+      </div>
+    </todoContext.Provider>
   );
 }

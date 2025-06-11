@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
-import { useTodo } from "./TodoComponentMain";
+import { todoContext } from "./TodoComponentMain";
 
 export function SearchInput({}) {
   const [searchInput, setSearchInput] = useState("");
   const [results, setResults] = useState([]);
-  const ctx = useContext(useTodo);
+  const { todoList } = useContext(todoContext);
 
   const search = () => {
-    const tmp = ctx.todoList.filter((element) =>
+    const tmp = todoList.filter((element) =>
       element.inputValue.includes(searchInput)
     );
 

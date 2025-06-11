@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import TodoItem from "./TodoItem";
-import { useTodo } from "./TodoComponentMain";
+import { todoContext } from "./TodoComponentMain";
 
 export function TodoList({}) {
   // console.log("투두리스트", todoList);
-  const ctx = useContext(useTodo);
+  const { todoList } = useContext(todoContext);
+  console.log("todoList", todoList);
   return (
     <div>
       <ul
@@ -15,8 +16,8 @@ export function TodoList({}) {
           minWidth: 300,
         }}
       >
-        {ctx.todoList.map(({ inputValue, inputColor }, idx) => {
-          return <TodoItem text={inputValue} color={inputColor} idx={idx} />;
+        {todoList.map(({ id, inputValue, inputColor }, idx) => {
+          return <TodoItem todoId={id} text={inputValue} color={inputColor} />;
         })}
       </ul>
     </div>

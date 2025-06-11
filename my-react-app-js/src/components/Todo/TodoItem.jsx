@@ -1,21 +1,32 @@
-import { useContext, useState } from "react";
-import { useTodo } from "./TodoComponentMain";
+import { useContext, useRef, useState } from "react";
+import { todoContext } from "./TodoComponentMain";
 
-export default function TodoItem({ text, color, idx }) {
-  const [modifyValue, setModifyValue] = useState(text);
-  const ctx = useContext(useTodo);
+export default function TodoItem({ todoId, text, color }) {
+  const [modifyText, setModifyText] = useState(text);
+  const { modifyTodo, delTodo } = useContext(todoContext);
+  const [isEditmode, setEditMode] = useState(false);
+
+  const onClickEdit = () => {
+    if (!isEditmode) {
+      setEditMode(true);
+    } else {
+      console.log("modifyText", modifyText);
+      modifyTodo(todoId, { inputValue: modifyText });
+      setEditMode(false);
+    }
+  };
+
   return (
     <li
       style={{
+        display: "block",
+        padding: 10,
         backgroundColor: color,
-        marginTop: 20,
-        borderRadius: 3,
-        minWidth: 300,
-        minHeight: 40,
-        // textAlign: "center",
+        borderRadius: 5,
+        position: "relative",
       }}
     >
-      <input
+      {/* <input
         style={{
           backgroundColor: "transparent",
           border: "unset",
@@ -24,23 +35,29 @@ export default function TodoItem({ text, color, idx }) {
         onChange={(e) => {
           setModifyValue(e.target.value);
         }}
-      ></input>
+      ></input> */}
 
-      {/* idx입니다{idx} */}
-      <div style={{}}>
-        <button
-          onClick={() => ctx.modifyTodo(idx, modifyValue)}
-          style={{ border: "none" }}
-        >
+      {isEditmode ? (
+        <input
+          value={modifyText}
+          onChange={(e) => {
+            setModifyText(e.target.value);
+          }}
+        />
+      ) : (
+        <span>{text}</span>
+      )}
+      <span style={{ position: "absolute", right: 10 }}>
+        <button onClick={() => onClickEdit()} style={{ border: "none" }}>
           수정
         </button>
         <button
-          onClick={() => ctx.delTodo(idx)}
+          onClick={() => delTodo(todoId)}
           style={{ border: "none", marginLeft: 10 }}
         >
           삭제
         </button>
-      </div>
+      </span>
     </li>
   );
 }
