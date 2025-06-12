@@ -19,10 +19,21 @@ import ContextExample from "./components/ContextExample/ContextExample";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapExample from "./components/BootstrapExample";
 import TodoComponentMain from "./components/Todo/TodoComponentMain";
+import MainApp from "./components/board/MainApp";
+import StyledExample from "./components/StyledExample";
+import TailwindExample from "./components/TailwindExample";
+import LazyExample from "./components/LazyExample/LazyExample";
 
 function App() {
   console.log("APP.jsx");
-  return <div>{<TodoComponentMain />}</div>;
+  return (
+    <div>
+      {
+        // <StyledExample />
+        <LazyExample />
+      }
+    </div>
+  );
 }
 
 export default App;
